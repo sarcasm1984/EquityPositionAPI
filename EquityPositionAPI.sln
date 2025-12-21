@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquityPositionAPI", "EquityPositionAPI\EquityPositionAPI.csproj", "{71E02D33-D505-4778-8B71-5D8BD0201705}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71E02D33-D505-4778-8B71-5D8BD0201705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E02D33-D505-4778-8B71-5D8BD0201705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E02D33-D505-4778-8B71-5D8BD0201705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E02D33-D505-4778-8B71-5D8BD0201705}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52918ADC-CC52-4469-9E3A-AB52577A5B68}
+	EndGlobalSection
+EndGlobal
