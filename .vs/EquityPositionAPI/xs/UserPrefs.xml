@@ -1,13 +1,15 @@
 ﻿<Properties StartupConfiguration="{71E02D33-D505-4778-8B71-5D8BD0201705}|Default">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.ItemProperties.EquityPositionAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="EquityPositionAPI/Services/TransactionPositionService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="EquityPositionAPI/appsettings.json">
     <Files>
       <File FileName="EquityPositionAPI/Models/TrafTestDatabaseSettings.cs" />
       <File FileName="EquityPositionAPI/Services/ITransactionPosition.cs" />
       <File FileName="EquityPositionAPI/Services/TransactionPositionService.cs" Line="155" Column="49" />
       <File FileName="EquityPositionAPI/Models/ITrafTestDatabaseSettings.cs" />
-      <File FileName="EquityPositionAPI/appsettings.json" />
+      <File FileName="EquityPositionAPI/appsettings.json" Line="5" Column="22" />
       <File FileName="EquityPositionAPI/Models/Transaction.cs" />
       <File FileName="EquityPositionAPI/Models/Position.cs" />
       <File FileName="EquityPositionAPI/Program.cs" />
@@ -24,18 +26,13 @@
               <Node name="Models" expanded="True" />
               <Node name="Objects" expanded="True" />
               <Node name="Properties" expanded="True" />
-              <Node name="Services" expanded="True">
-                <Node name="TransactionPositionService.cs" selected="True" />
-              </Node>
+              <Node name="Services" expanded="True" />
+              <Node name="appsettings.json" selected="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.EquityPositionAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>
