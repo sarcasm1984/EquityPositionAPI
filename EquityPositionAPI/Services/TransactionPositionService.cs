@@ -20,43 +20,39 @@ namespace EquityPositionAPI.Services
 
         public Position Create(TransactionObj transaction)
         {
+            var maxTrans = _transaction.Find(x => true).SortByDescending(t => t.TradeId).Limit(1).FirstOrDefault();
             var tempPos = _position.Find(pos => pos.SecurityCode == transaction.SecurityCode).FirstOrDefault();
-            var trans = new Transaction();
+            
+            var pos = new Position();
+            pos.TradeId = (maxTrans != null) ? maxTrans.TradeId + 1 : 1;
+            pos.TradeVersion = 1;
+            pos.SecurityCode = transaction.SecurityCode;
             if (tempPos != null)
             {
                 if (transaction.Buy_Sell == "BUY")
-                    tempPos.Value += transaction.Qty;
+                    pos.Value = tempPos.Value + transaction.Qty;
                 else if (transaction.Buy_Sell == "SELL")
-                    tempPos.Value -= transaction.Qty;
-                tempPos.TradeVersion = 1;
-                tempPos.TradeId = tempPos.TradeId + 1;
-                trans.TradeId = tempPos.TradeId;
-                trans.TradeVersion = tempPos.TradeVersion;
-                trans.Action = transaction.Action;
-                trans.Buy_Sell = transaction.Buy_Sell;
-                trans.SecurityCode = transaction.SecurityCode;
-                trans.Qty = transaction.Qty;
-                _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, tempPos);
-                _transaction.InsertOne(trans);
-                return tempPos;
+                    pos.Value = tempPos.Value - transaction.Qty;
+                _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
             }
             else
             {
-                var pos = new Position();
-                pos.SecurityCode = transaction.SecurityCode;
                 pos.Value = (transaction.Buy_Sell == "BUY") ? transaction.Qty : -transaction.Qty;
-                pos.TradeId = 1;
-                pos.TradeVersion = 1;
-                trans.TradeId = pos.TradeId;
-                trans.TradeVersion = pos.TradeVersion;
-                trans.Action = transaction.Action;
-                trans.Buy_Sell = transaction.Buy_Sell;
-                trans.SecurityCode = transaction.SecurityCode;
-                trans.Qty = transaction.Qty;
                 _position.InsertOne(pos);
-                _transaction.InsertOne(trans);
-                return pos;
             }
+                
+
+            var trans = new Transaction();
+            trans.TradeId = pos.TradeId;
+            trans.TradeVersion = pos.TradeVersion;
+            trans.Action = transaction.Action;
+            trans.Buy_Sell = transaction.Buy_Sell;
+            trans.SecurityCode = transaction.SecurityCode;
+            trans.Qty = transaction.Qty;
+
+            _transaction.InsertOne(trans);
+
+            return pos;
         }
 
         public List<Position> Get()
@@ -100,62 +96,50 @@ namespace EquityPositionAPI.Services
 
         public void Update(TransactionObj transaction)
         {
-            var trans = new Transaction();
+            var maxTrans = _transaction.Find(x => true).SortByDescending(t => t.TradeId).Limit(1).FirstOrDefault();
             var tempPos = _position.Find(pos => pos.SecurityCode == transaction.SecurityCode).FirstOrDefault();
-            if (tempPos == null)
-            {
-                trans.Action = "INSERT";
-                var pos = new Position();
-                pos.SecurityCode = transaction.SecurityCode;
-                pos.Value = (transaction.Buy_Sell == "BUY") ? transaction.Qty : -transaction.Qty;
-                pos.TradeId = 1;
-                pos.TradeVersion = 1;
-                trans.TradeId = pos.TradeId;
-                trans.TradeVersion = pos.TradeVersion;
-                trans.Action = transaction.Action;
-                trans.Buy_Sell = transaction.Buy_Sell;
-                trans.SecurityCode = transaction.SecurityCode;
-                trans.Qty = transaction.Qty;
-                _position.InsertOne(pos);
-            }
-            else
+            var pos = new Position();
+            var trans = new Transaction();
+            pos.SecurityCode = transaction.SecurityCode;
+            if (tempPos != null)
             {
                 var lastTrans = _transaction.Find(t => t.TradeId == tempPos.TradeId && t.TradeVersion == tempPos.TradeVersion
                     && t.SecurityCode == tempPos.SecurityCode).FirstOrDefault();
-                if(lastTrans.Action == "CANCEL")
+                if (lastTrans.Action == "CANCEL")
                 {
-                    var pos = new Position();
-                    pos.SecurityCode = transaction.SecurityCode;
-                    pos.Value = (transaction.Buy_Sell == "BUY") ? transaction.Qty : -transaction.Qty;
-                    pos.TradeId = tempPos.TradeId + 1;
-                    pos.TradeVersion = 1;
-                    trans.TradeId = pos.TradeId;
-                    trans.TradeVersion = pos.TradeVersion;
                     trans.Action = "INSERT";
-                    trans.Buy_Sell = transaction.Buy_Sell;
-                    trans.SecurityCode = transaction.SecurityCode;
-                    trans.Qty = transaction.Qty;
-                    _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
+                    pos.TradeId = (maxTrans != null) ? maxTrans.TradeId + 1 : 1;
+                    pos.TradeVersion = 1;
+                    pos.Value = (transaction.Buy_Sell == "BUY") ? transaction.Qty : -transaction.Qty;
                 }
                 else
                 {
-                    var pos = new Position();
-                    pos.SecurityCode = transaction.SecurityCode;
+                    trans.Action = transaction.Action;
+                    pos.TradeId = tempPos.TradeId;
+                    pos.TradeVersion = tempPos.TradeVersion + 1;
                     if (transaction.Buy_Sell == "BUY")
                         pos.Value = tempPos.Value + transaction.Qty;
                     else if (transaction.Buy_Sell == "SELL")
                         pos.Value = tempPos.Value - transaction.Qty;
-                    pos.TradeId = tempPos.TradeId;
-                    pos.TradeVersion = tempPos.TradeVersion + 1;
-                    trans.TradeId = pos.TradeId;
-                    trans.TradeVersion = pos.TradeVersion;
-                    trans.Action = transaction.Action;
-                    trans.Buy_Sell = transaction.Buy_Sell;
-                    trans.SecurityCode = transaction.SecurityCode;
-                    trans.Qty = transaction.Qty;
-                    _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
                 }
+                _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
+
             }
+            else
+            {
+                pos.Value = (transaction.Buy_Sell == "BUY") ? transaction.Qty : -transaction.Qty;
+                trans.Action = "INSERT";
+                pos.TradeId = (maxTrans != null) ? maxTrans.TradeId + 1 : 1;
+                pos.TradeVersion = 1;
+                _position.InsertOne(pos);
+            }
+
+            
+            trans.TradeId = pos.TradeId;
+            trans.TradeVersion = pos.TradeVersion;
+            trans.Buy_Sell = transaction.Buy_Sell;
+            trans.SecurityCode = transaction.SecurityCode;
+            trans.Qty = transaction.Qty;
             _transaction.InsertOne(trans);
         }
     }
