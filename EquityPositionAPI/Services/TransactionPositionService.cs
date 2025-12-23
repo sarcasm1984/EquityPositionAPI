@@ -78,20 +78,23 @@ namespace EquityPositionAPI.Services
         public void Remove(TransactionObj transaction)
         {
             var tempPos = _position.Find(p => p.SecurityCode == transaction.SecurityCode).FirstOrDefault();
-            var pos = new Position();
-            var trans = new Transaction();
-            pos.SecurityCode = transaction.SecurityCode;
-            pos.Value = 0;
-            pos.TradeVersion = tempPos.TradeVersion + 1;
-            pos.TradeId = tempPos.TradeId;
-            trans.TradeId = pos.TradeId;
-            trans.TradeVersion = pos.TradeVersion;
-            trans.Action = transaction.Action;
-            trans.Buy_Sell = transaction.Buy_Sell;
-            trans.SecurityCode = transaction.SecurityCode;
-            trans.Qty = transaction.Qty;
-            _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
-            _transaction.InsertOne(trans);
+            if(tempPos != null)
+            {
+                var pos = new Position();
+                var trans = new Transaction();
+                pos.SecurityCode = transaction.SecurityCode;
+                pos.Value = 0;
+                pos.TradeVersion = tempPos.TradeVersion + 1;
+                pos.TradeId = tempPos.TradeId;
+                trans.TradeId = pos.TradeId;
+                trans.TradeVersion = pos.TradeVersion;
+                trans.Action = transaction.Action;
+                trans.Buy_Sell = transaction.Buy_Sell;
+                trans.SecurityCode = transaction.SecurityCode;
+                trans.Qty = transaction.Qty;
+                _position.ReplaceOne(p => p.SecurityCode == transaction.SecurityCode, pos);
+                _transaction.InsertOne(trans);
+            }
         }
 
         public void Update(TransactionObj transaction)
